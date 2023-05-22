@@ -13,14 +13,15 @@ RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet tool install --global dotnet-ef
+RUN export PATH="$PATH:$HOME/.dotnet/tools/"
+RUN dotnet ef migrations add initialMigration --project TODO
+RUN dotnet ef database update --project TODO
 
 FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TODO.dll"]
-RUN export PATH="$PATH:$HOME/.dotnet/tools/"
-RUN dotnet ef migrations add initialMigration --project TODO
-RUN dotnet ef database update --project TODO
 
 RUN apt-get update
 RUN apt install sqlite3 -y
