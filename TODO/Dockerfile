@@ -10,7 +10,8 @@ RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
 COPY . .
 RUN dotnet tool install --global dotnet-ef
-EXPOSE PATH="$PATH:$HOME/.dotnet/tools/"
+RUN dotnet-ef
+RUN export PATH="$PATH:$HOME/.dotnet/tools/"
 RUN dotnet ef migrations add initialMigration --project TODO
 RUN dotnet ef database update --project TODO
 RUN dotnet build "TODO.csproj" -c Release -o /app/build
