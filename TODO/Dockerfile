@@ -12,9 +12,10 @@ COPY . .
 RUN dotnet tool install --global dotnet-ef
 ENV PATH $PATH:/root/.dotnet/tools
 RUN dotnet-ef
-RUN pwd
+WORKDIR /src
 RUN dotnet ef migrations add initialMigration --project TODO
 RUN dotnet ef database update --project TODO
+WORKDIR "/src/TODO"
 RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
