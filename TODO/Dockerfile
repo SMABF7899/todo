@@ -10,6 +10,7 @@ RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
 COPY . .
 RUN dotnet tool install --global dotnet-ef
+RUN /bin/bash
 RUN dotnet-ef
 RUN export PATH="$PATH:$HOME/.dotnet/tools/"
 RUN dotnet ef migrations add initialMigration --project TODO
