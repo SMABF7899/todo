@@ -9,11 +9,11 @@ COPY ["TODO.csproj", "TODO/"]
 RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
 COPY . .
-RUN dotnet build "TODO.csproj" -c Release -o /app/build
 RUN dotnet tool install --global dotnet-ef
 RUN export PATH="$PATH:$HOME/.dotnet/tools/"
 RUN dotnet ef migrations add initialMigration --project TODO
 RUN dotnet ef database update --project TODO
+RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
