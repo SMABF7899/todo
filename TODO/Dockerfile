@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -13,6 +13,8 @@ RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet ef migrations add initialMigration --project TODO
+RUN dotnet ef database update --project TODO
 
 FROM base AS final
 WORKDIR /app
