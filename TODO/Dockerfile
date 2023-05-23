@@ -22,6 +22,8 @@ RUN cat database.db
 RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
+RUN pwd
+RUN cat database.db
 RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
 #COPY /src/TODO/database.db /app/publish
 
