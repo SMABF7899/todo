@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/smabf/RiderProjects/TODO/TODO/TODO.csproj": {}
+    "C:\\Users\\SMABF\\RiderProjects\\todo\\TODO\\TODO.csproj": {}
   },
   "projects": {
-    "/Users/smabf/RiderProjects/TODO/TODO/TODO.csproj": {
+    "C:\\Users\\SMABF\\RiderProjects\\todo\\TODO\\TODO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/smabf/RiderProjects/TODO/TODO/TODO.csproj",
+        "projectUniqueName": "C:\\Users\\SMABF\\RiderProjects\\todo\\TODO\\TODO.csproj",
         "projectName": "TODO",
-        "projectPath": "/Users/smabf/RiderProjects/TODO/TODO/TODO.csproj",
-        "packagesPath": "/Users/smabf/.nuget/packages/",
-        "outputPath": "/Users/smabf/RiderProjects/TODO/TODO/obj/",
+        "projectPath": "C:\\Users\\SMABF\\RiderProjects\\todo\\TODO\\TODO.csproj",
+        "packagesPath": "C:\\Users\\SMABF\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\SMABF\\RiderProjects\\todo\\TODO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/smabf/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\SMABF\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\SMABF\\.dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }
