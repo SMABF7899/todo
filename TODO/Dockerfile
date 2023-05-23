@@ -17,8 +17,8 @@ RUN dotnet-ef
 WORKDIR /src
 RUN dotnet ef migrations add initialMigration --project TODO
 RUN dotnet ef database update --project TODO
-RUN cat TODO/database.db
 WORKDIR "/src/TODO"
+RUN cat TODO/database.db
 RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
