@@ -24,9 +24,9 @@ RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
-#RUN cp database.db /app/publish
 
 FROM base AS final
+RUN cp database.db /app/publish
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TODO.dll"]
