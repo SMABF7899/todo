@@ -26,6 +26,7 @@ RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+WORKDIR /app/publish
 RUN ls
 ENTRYPOINT ["dotnet", "TODO.dll"]
 #WORKDIR "/src/TODO"
