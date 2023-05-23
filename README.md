@@ -11,6 +11,4 @@ For the new deployment, you need to backup the following files :\
 ```/app/database.db-wal``` and ```/app/database.db-shm```\
 Of course, this is observed in the deployment script of the project
 
-<button onclick="window.location.href='https://smabf.ir';">
-Visit My Website
-</button>
+[Visit my website](https://smabf.ir)
