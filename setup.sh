@@ -21,10 +21,10 @@ docker rm -f -v TODO-List
 echo -e "${YELLOW}[local] docker run --name TODO-List -d --network-alias todo-list -p 5000:5000 -p 7011:7011 --network net_c34-122-0 -e ASPNETCORE_HTTP_PORT=https:+7011 -e ASPNETCORE_URLS=http://+:5000 todo-list:latest${NC}"
 docker run --name TODO-List -d --network-alias todo-list -p 5000:5000 -p 7011:7011 --network net_c34-122-0 -e ASPNETCORE_HTTP_PORT=https:+7011 -e ASPNETCORE_URLS=http://+:5000 todo-list:latest
 sleep 5
-echo -e "${YELLOW}[local] docker cp database.db-wal TODO-List:/app${NC}"
-docker cp database.db-wal TODO-List:/app
-echo -e "${YELLOW}[local] docker cp database.db-shm TODO-List:/app${NC}"
-docker cp database.db-shm TODO-List:/app
+echo -e "${YELLOW}[local] docker cp ./database.db-wal TODO-List:/app/${NC}"
+docker cp ./database.db-wal TODO-List:/app/
+echo -e "${YELLOW}[local] docker cp ./database.db-shm TODO-List:/app/${NC}"
+docker cp ./database.db-shm TODO-List:/app/
 echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
