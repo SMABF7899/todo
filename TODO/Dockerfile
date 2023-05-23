@@ -22,12 +22,11 @@ RUN dotnet build "TODO.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "TODO.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN ls /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-WORKDIR /app/publish
-RUN ls
 ENTRYPOINT ["dotnet", "TODO.dll"]
 #WORKDIR "/src/TODO"
 #COPY database.db /app
