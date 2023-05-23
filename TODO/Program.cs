@@ -4,7 +4,7 @@ using TODO;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "TODO List");
+app.MapGet("/", () => "TODO List New");
 app.MapPost("/signup", signup);
 app.MapGet("/allUsers", allUsers);
 
