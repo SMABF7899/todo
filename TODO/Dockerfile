@@ -9,8 +9,6 @@ COPY ["TODO.csproj", "TODO/"]
 RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
 COPY . .
-RUN apt-get update
-RUN apt install sqlite3 -y
 RUN dotnet tool install --global dotnet-ef
 ENV PATH $PATH:/root/.dotnet/tools
 RUN dotnet-ef
@@ -29,5 +27,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TODO.dll"]
-#WORKDIR "/src/TODO"
-#COPY database.db /app
+RUN apt-get update
+RUN apt install sqlite3 -y
