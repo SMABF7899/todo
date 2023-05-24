@@ -23,10 +23,10 @@ docker run --name TODO-List -d --network-alias todo-list -p 5000:5000 -p 7011:70
 sleep 5
 echo -e "${YELLOW}[local] cd ..${NC}"
 cd ..
-echo -e "${YELLOW}[local] docker cp ./database.db-wal TODO-List:/app/${NC}"
-docker cp ./database.db-wal TODO-List:/app/
-echo -e "${YELLOW}[local] docker cp ./database.db-shm TODO-List:/app/${NC}"
-docker cp ./database.db-shm TODO-List:/app/
+echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/${NC}"
+docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/
+echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/${NC}"
+docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/
 echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
