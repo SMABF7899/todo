@@ -7,7 +7,7 @@ var app = builder.Build();
 app.MapGet("/", () => "TODO List");
 app.MapPost("/signup", signup);
 app.MapGet("/allUsers", allUsers);
-app.MapGet("/healthCheck", () => "app is Up :)")
+app.MapGet("/healthCheck", () => "app is Up :)");
 
 Object signup(Signup signup)
 {
