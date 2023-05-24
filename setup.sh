@@ -31,7 +31,7 @@ echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
 i=1
-while [[ ${result} != ${healthCheck} ]]; do
+while [[ ${result} != "app is Up :)" ]]; do
     echo -e "${YELLOW}Try "$i" of 20 ...${NC}"
     sleep 10
     echo -e "${YELLOW}[local] curl --max-time 30 -s http://127.0.0.1:5000/healthCheck${NC}"
