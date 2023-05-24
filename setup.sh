@@ -30,5 +30,18 @@ docker cp ./database.db-shm TODO-List:/app/
 echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
-echo -e "${YELLOW}[local] curl --max-time 30 -s http://127.0.0.1:5000${NC}"
-curl --max-time 30 -s http://127.0.0.1:5000
+i=1
+while [[ ${result} != ${healthCheck} ]]; do
+    echo -e "${YELLOW}Try "$i" of 20 ...${NC}"
+    sleep 10
+    echo -e "${YELLOW}[local] curl --max-time 30 -s http://127.0.0.1:5000/healthCheck${NC}"
+    result=`curl --max-time 30 -s http://127.0.0.1:5000/healthCheck`
+    echo -e "${YELLOW}Expected Result: app is Up :)${NC}"
+    echo -e "${YELLOW}Current  Result: $result${NC}"
+    ((i=i+1))
+    if [ $i == 20 ]; then
+        echo -e "${RED}Error in Deploy${NC}"
+        exit 1
+    fi
+done
+echo -e "${GREEN}Deployed Successfully${NC}"
