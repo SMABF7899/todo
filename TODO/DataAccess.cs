@@ -1,23 +1,46 @@
 ﻿namespace TODO;
 
-public class DataAccess
+public abstract class DataAccess
 {
     public static object AddUser(Signup signup)
     {
-        Object response = new { message = "", };
-        using (var db = new Database())
+        object response = new { message = "Username or email is already registered", };
+        using var db = new Database();
+        if (!db.Signups.Any())
         {
-            foreach (var SignupDb in db.Signups)
+            db.Signups.Add(signup);
+            db.SaveChanges();
+            response = new { message = "Registration was successful", };
+        }
+        else
+        {
+            int flag = db.Signups.Count();
+            foreach (var signupDb in db.Signups)
             {
-                if (signup.email != SignupDb.email && signup.username != SignupDb.username)
+                if (signup.email != signupDb.email && signup.username != signupDb.username)
                 {
-                    db.Signups.Add(signup);
-                    db.SaveChanges();
-                    response = new { message = "Registration was successful", };
+                    flag--;
+                    if (flag == 0)
+                    {
+                        db.Signups.Add(signup);
+                        db.SaveChanges();
+                        response = new { message = "Registration was successful", };
+                    }
                 }
-                else
-                    response = new { message = "Username or email is already registered", };
             }
+        }
+
+        return response;
+    }
+
+    public static object EnterUser(Login login)
+    {
+        object response = new { message = "Username or password is not correct", };
+        using var db = new Database();
+        foreach (var signup in db.Signups)
+        {
+            if (signup.username == login.username && signup.password == login.password)
+                response = new { message = "Login was successful", };
         }
 
         return response;
@@ -26,20 +49,18 @@ public class DataAccess
     public static List<object> GetAllUsers()
     {
         List<object> response = new List<object>();
-        using (var db = new Database())
+        using var db = new Database();
+        foreach (var signup in db.Signups)
         {
-            foreach (var signup in db.Signups)
+            response.Add(new
             {
-                response.Add(new
-                {
-                    id = signup.id,
-                    firstName = signup.firstName,
-                    lastName = signup.lastName,
-                    username = signup.username,
-                    email = signup.email,
-                    password = signup.password
-                });
-            }
+                id = signup.Id,
+                firstName = signup.firstName,
+                lastName = signup.lastName,
+                username = signup.username,
+                email = signup.email,
+                password = signup.password
+            });
         }
 
         return response;
