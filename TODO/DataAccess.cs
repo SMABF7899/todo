@@ -4,16 +4,22 @@ public class DataAccess
 {
     public static object AddUser(Signup signup)
     {
+        Object response = new { message = "", };
         using (var db = new Database())
         {
-            db.Signups.Add(signup);
-            db.SaveChanges();
+            foreach (var SignupDb in db.Signups)
+            {
+                if (signup.email != SignupDb.email && signup.username != SignupDb.username)
+                {
+                    db.Signups.Add(signup);
+                    db.SaveChanges();
+                    response = new { message = "Registration was successful", };
+                }
+                else
+                    response = new { message = "Username or email is already registered", };
+            }
         }
 
-        Object response = new
-        {
-            message = "Registration was successful",
-        };
         return response;
     }
 
