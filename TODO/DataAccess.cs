@@ -106,4 +106,24 @@ public abstract class DataAccess
 
         return response;
     }
+
+    public static object EditIssue(Issue newIssue)
+    {
+        object response = new { message = "Issue not found", };
+        using var db = new Database();
+        foreach (var issue in db.Issues)
+        {
+            if (newIssue.Id == issue.Id)
+            {
+                issue.Summary = newIssue.Summary;
+                issue.Description = newIssue.Description;
+                issue.Priority = newIssue.Priority;
+                issue.Condition = newIssue.Condition;
+                db.SaveChanges();
+                response = new { message = "Issue has been updated", };
+            }
+        }
+
+        return response;
+    }
 }

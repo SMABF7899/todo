@@ -9,5 +9,8 @@ public abstract class Main
     public static List<object> AllUsersMethod() { return DataAccess.GetAllUsers(); }
 
     public static object CreateIssueMethod(Issue issue) { return DataAccess.AddIssue(issue); }
+    
     public static List<object> AllIssuesMethod() { return DataAccess.GetAllIssue(); }
+    
+    public static object EditIssueMethod(Issue issue) { return DataAccess.EditIssue(issue); }
 }
