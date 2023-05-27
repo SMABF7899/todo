@@ -1,4 +1,6 @@
-﻿namespace TODO;
+﻿using dotenv.net;
+
+namespace TODO;
 
 public abstract class DataAccess
 {
@@ -37,16 +39,18 @@ public abstract class DataAccess
 
     public static object EnterUser(Login login)
     {
-        
+        DotEnv.Load();
         object response = new { message = "Username or password is not correct", };
         using var db = new Database();
         foreach (var signup in db.Signups)
         {
-            if (signup.username == login.username && signup.password == login.password && BCrypt.Net.BCrypt.Verify(login.password, signup.personalToken))
+            if (signup.username == login.username && signup.password == login.password &&
+                BCrypt.Net.BCrypt.Verify(login.password, signup.personalToken))
             {
-                string secret = signup.personalToken + "634F74422332688E2FC348EC5B8DC";
+                string secret = signup.personalToken + Environment.GetEnvironmentVariable("SECRET_KEY");
                 JwtService jwtService = new JwtService(secret, "https://smabf.ir/", "https://todo.smabf.ir");
-                response = new { message = "Login was successful", jwt = jwtService.GenerateSecurityToken(login.username) };
+                response = new
+                    { message = "Login was successful", jwt = jwtService.GenerateSecurityToken(login.username) };
             }
         }
 
