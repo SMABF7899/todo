@@ -11,6 +11,7 @@ app.MapGet("/allUsers", allUsers);
 app.MapPost("/createIssue", createIssue);
 app.MapGet("/allIssues", allIssues);
 app.MapPost("/editIssue", editIssue);
+app.MapPost("/deleteIssue", deleteIssue);
 app.MapGet("/healthCheck", () => "app is Up :)");
 
 object signup(Signup signup) { return Main.SignupMethod(signup); }
@@ -24,5 +25,7 @@ object createIssue(Issue issue) { return Main.CreateIssueMethod(issue); }
 object allIssues() { return Main.AllIssuesMethod(); }
 
 object editIssue(Issue issue) { return Main.EditIssueMethod(issue); }
+
+object deleteIssue(int Id) { return Main.DeleteIssueMethod(Id); }
 
 app.Run();

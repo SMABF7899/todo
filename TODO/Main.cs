@@ -13,4 +13,6 @@ public abstract class Main
     public static List<object> AllIssuesMethod() { return DataAccess.GetAllIssue(); }
     
     public static object EditIssueMethod(Issue issue) { return DataAccess.EditIssue(issue); }
+    
+    public static object DeleteIssueMethod(int Id) { return DataAccess.DeleteIssue(Id); }
 }

@@ -126,4 +126,21 @@ public abstract class DataAccess
 
         return response;
     }
+
+    public static object DeleteIssue(int Id)
+    {
+        object response = new { message = "Issue not found", };
+        using var db = new Database();
+        foreach (var issue in db.Issues)
+        {
+            if (Id == issue.Id)
+            {
+                db.Issues.Remove(issue);
+                db.SaveChanges();
+                response = new { message = "Issue has been deleted", };
+            }
+        }
+
+        return response;
+    }
 }
