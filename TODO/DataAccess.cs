@@ -6,6 +6,8 @@ public abstract class DataAccess
     {
         object response = new { message = "Username or email is already registered", };
         using var db = new Database();
+        string token = BCrypt.Net.BCrypt.HashPassword(signup.password);
+        signup.personalToken = token;
         if (!db.Signups.Any())
         {
             db.Signups.Add(signup);
@@ -35,12 +37,17 @@ public abstract class DataAccess
 
     public static object EnterUser(Login login)
     {
+        
         object response = new { message = "Username or password is not correct", };
         using var db = new Database();
         foreach (var signup in db.Signups)
         {
-            if (signup.username == login.username && signup.password == login.password)
-                response = new { message = "Login was successful", };
+            if (signup.username == login.username && signup.password == login.password && BCrypt.Net.BCrypt.Verify(login.password, signup.personalToken))
+            {
+                string secret = signup.personalToken + "634F74422332688E2FC348EC5B8DC";
+                JwtService jwtService = new JwtService(secret, "https://smabf.ir/", "https://todo.smabf.ir");
+                response = new { message = "Login was successful", jwt = jwtService.GenerateSecurityToken(login.username) };
+            }
         }
 
         return response;
@@ -55,6 +62,7 @@ public abstract class DataAccess
             response.Add(new
             {
                 id = signup.Id,
+                personalToken = signup.personalToken,
                 firstName = signup.firstName,
                 lastName = signup.lastName,
                 username = signup.username,
