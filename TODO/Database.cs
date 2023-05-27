@@ -10,4 +10,5 @@ public class Database : DbContext
     }
 
     public DbSet<Signup> Signups { get; set; }
+    public DbSet<Issue> Issues { get; set; }
 }
