@@ -77,4 +77,33 @@ public abstract class DataAccess
 
         return response;
     }
+
+    public static object AddIssue(Issue issue)
+    {
+        using var db = new Database();
+        db.Issues.Add(issue);
+        db.SaveChanges();
+        object response = new { message = "Issue has been successfully created" };
+        return response;
+    }
+
+    public static List<object> GetAllIssue()
+    {
+        List<object> response = new List<object>();
+        using var db = new Database();
+        foreach (var issue in db.Issues)
+        {
+            response.Add(new
+            {
+                id = issue.Id,
+                summary = issue.Summary,
+                reporter = issue.Reporter,
+                description = issue.Description,
+                priority = issue.Priority,
+                condition = issue.Condition
+            });
+        }
+
+        return response;
+    }
 }
