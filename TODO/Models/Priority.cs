@@ -1,4 +1,4 @@
-﻿namespace TODO;
+﻿namespace TODO.Models;
 
 public enum Priority
 {
