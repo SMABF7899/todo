@@ -1,6 +1,7 @@
 ﻿using dotenv.net;
+using TODO.Models;
 
-namespace TODO;
+namespace TODO.BusinessLayer;
 
 public abstract class DataAccess
 {
