@@ -3,7 +3,7 @@ using TODO.Models;
 
 namespace TODO.BusinessLayer;
 
-public abstract class DataAccess
+public abstract class Main
 {
     public static object AddUser(Signup signup)
     {
