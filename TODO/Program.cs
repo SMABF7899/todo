@@ -20,7 +20,7 @@ namespace TODO
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     policy =>
                     {
-                        policy.WithOrigins("http://127.0.0.1:3000");
+                        policy.WithOrigins("http://213.232.126.34:3000");
                     });
             });
             builder.Services.AddControllers();
