@@ -9,7 +9,7 @@ public abstract class Main : Validation
         if (!NotEmpty.CheckSignup(signup)) return Results.BadRequest(new { message = "Enter the requested items" });
         if (CheckEmail(signup.email) && CheckName(signup.firstName, signup.lastName) &&
             CheckUsername(signup.username) && CheckPassword(signup.password))
-            return Results.Ok(new { message = (string)BusinessLayer.Main.AddUser(signup) });
+            return Results.Ok(new { message = BusinessLayer.Main.AddUser(signup) });
         return Results.BadRequest(new { message = "Enter the parameters correctly" });
     }
 
@@ -17,7 +17,7 @@ public abstract class Main : Validation
     {
         if (!NotEmpty.CheckLogin(login)) return Results.BadRequest(new { message = "Enter the requested items" });
         if (CheckUsername(login.username) && CheckPassword(login.password))
-            return Results.Ok(new { message = (string)BusinessLayer.Main.EnterUser(login) });
+            return Results.Ok(new { message = BusinessLayer.Main.EnterUser(login) });
         return Results.BadRequest(new { message = "Enter the parameters correctly" });
     }
 
@@ -29,7 +29,7 @@ public abstract class Main : Validation
     public static IResult CreateIssueMethod(Issue issue)
     {
         return NotEmpty.CheckIssue(issue)
-            ? Results.Ok(new { message = (string)BusinessLayer.Main.AddIssue(issue) })
+            ? Results.Ok(new { message = BusinessLayer.Main.AddIssue(issue) })
             : Results.BadRequest(new { message = "Enter the requested items" });
     }
 
@@ -41,7 +41,7 @@ public abstract class Main : Validation
     public static IResult EditIssueMethod(Issue issue)
     {
         return NotEmpty.CheckIssue(issue)
-            ? Results.Ok(new { message = (string)BusinessLayer.Main.EditIssue(issue) })
+            ? Results.Ok(new { message = BusinessLayer.Main.EditIssue(issue) })
             : Results.BadRequest(new { message = "Enter the requested items" });
     }
 

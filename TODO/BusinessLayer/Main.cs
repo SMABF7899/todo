@@ -8,33 +8,11 @@ public abstract class Main
     public static object AddUser(Signup signup)
     {
         object response = new { message = "Username or email is already registered", };
-        using var db = new Database();
-        string token = BCrypt.Net.BCrypt.HashPassword(signup.password);
+        var token = BCrypt.Net.BCrypt.HashPassword(signup.password);
         signup.personalToken = token;
-        if (!db.Signups.Any())
-        {
-            db.Signups.Add(signup);
-            db.SaveChanges();
-            response = new { message = "Registration was successful", };
-        }
-        else
-        {
-            int flag = db.Signups.Count();
-            foreach (var signupDb in db.Signups)
-            {
-                if (signup.email != signupDb.email && signup.username != signupDb.username)
-                {
-                    flag--;
-                    if (flag == 0)
-                    {
-                        db.Signups.Add(signup);
-                        db.SaveChanges();
-                        response = new { message = "Registration was successful", };
-                    }
-                }
-            }
-        }
-
+        if (DataAccessLayer.Main.FindUser(signup.username, signup.email)) return response;
+        DataAccessLayer.Main.InsertUser(signup);
+        response = new { message = "Registration was successful", };
         return response;
     }
 

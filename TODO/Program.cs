@@ -1,14 +1,37 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TODO.Models;
 
 namespace TODO
 {
-    public abstract class Program
+    public class Program
     {
         public static void Main(String[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var app = builder.Build();
+            
+            var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://127.0.0.1:3000");
+                    });
+            });
+            builder.Services.AddControllers();
+            var app = builder.Build();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
+            app.UseAuthorization();
+            app.MapControllers();
+            
             app.MapGet("/", () => "TODO List");
             app.MapPost("/signup", signup);
             app.MapPost("/login", login);
@@ -37,4 +60,3 @@ namespace TODO
         }
     }
 }
-

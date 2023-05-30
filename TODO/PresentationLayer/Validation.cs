@@ -7,13 +7,13 @@ public abstract class Validation
     private static bool CheckNotNumber(string input)
     {
         var numbers = new[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-        return numbers.All(number => input.IndexOf(number) != -1);
+        return numbers.All(number => input.IndexOf(number) == -1);
     }
 
     private static bool CheckNotIllegalCharacters(string input)
     {
         var illegalCharacters = new[] { '#', '$', '%', '&', '*', '+', '/', '=', '?', '\'', '@' };
-        return illegalCharacters.All(illegalCharacter => input.IndexOf(illegalCharacter) != -1);
+        return illegalCharacters.All(illegalCharacter => input.IndexOf(illegalCharacter) == -1);
     }
 
     protected static bool CheckEmail(string email)
