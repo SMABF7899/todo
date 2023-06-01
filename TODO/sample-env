@@ -1,1 +1,6 @@
 ﻿SECRET_KEY=Enter-Your-Secret_Key-256-byte
+SECRET_KEY_FOR_ALLOW_CLIENT=Enter-Your-Secret_Key-256-byte
+CLIENT_ADDRESS=Enter-Your-Client-Address
+ISSUER_ADDRESS=Enter-Your-Issuer-Address
+AUDIENCE_ADDRESS=Enter-Your-Audience-Address
+APP_IP=localhost
