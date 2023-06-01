@@ -7,11 +7,13 @@ RUN apt install sqlite3 -y
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
+RUN ls
 RUN apt-get update
 RUN apt install sqlite3 -y
 COPY ["TODO.csproj", "TODO/"]
 RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
+RUN ls
 COPY . .
 RUN dotnet tool install --global dotnet-ef
 ENV PATH $PATH:/root/.dotnet/tools
