@@ -19,7 +19,7 @@ public class Main
         return recordUsername != null || recordEmail != null;
     }
 
-    public static string LoginUser(Login login)
+    public static string? LoginUser(Login login)
     {
         DotEnv.Load();
         var record = Db.Signups.FirstOrDefault(record => record.username == login.username);
