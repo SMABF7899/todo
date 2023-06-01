@@ -30,7 +30,7 @@ public abstract class Main : Validation
     public static IResult CreateIssueMethod(Issue issue)
     {
         return NotEmpty.CheckIssue(issue)
-            ? Results.Ok(new { message = BusinessLayer.Main.AddIssue(issue) })
+            ? BusinessLayer.Main.AddIssue(issue)
             : Results.BadRequest(new { message = "Enter the requested items" });
     }
 
@@ -42,12 +42,9 @@ public abstract class Main : Validation
     public static IResult EditIssueMethod(Issue issue)
     {
         return NotEmpty.CheckIssue(issue)
-            ? Results.Ok(new { message = BusinessLayer.Main.EditIssue(issue) })
+            ? BusinessLayer.Main.EditIssue(issue)
             : Results.BadRequest(new { message = "Enter the requested items" });
     }
 
-    public static IResult DeleteIssueMethod(int id)
-    {
-        return Results.Ok(new { message = BusinessLayer.Main.DeleteIssue(id) });
-    }
+    public static IResult DeleteIssueMethod(int id) { return BusinessLayer.Main.DeleteIssue(id); }
 }

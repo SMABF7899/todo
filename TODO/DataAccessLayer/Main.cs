@@ -3,12 +3,18 @@ using TODO.Models;
 
 namespace TODO.DataAccessLayer;
 
-public class Main
+public abstract class Main
 {
     private static readonly Database Db = new Database();
     public static void InsertUser(Signup signup)
     {
         Db.Signups.Add(signup);
+        Db.SaveChanges();
+    }
+
+    public static void InsertIssue(Issue issue)
+    {
+        Db.Issues.Add(issue);
         Db.SaveChanges();
     }
 
@@ -37,5 +43,26 @@ public class Main
             return jwt;
         }
         return "";
+    }
+
+    public static bool EditIssue(Issue issue)
+    {
+        var record = Db.Issues.FirstOrDefault(record => record.Id == issue.Id);
+        if (record == null) return false;
+        record.Summary = issue.Summary;
+        record.Description = issue.Description;
+        record.Priority = issue.Priority;
+        record.Condition = issue.Condition;
+        Db.SaveChanges();
+        return true;
+    }
+
+    public static bool DeleteIssue(int id)
+    {
+        var record = Db.Issues.FirstOrDefault(record => record.Id == id);
+        if (record == null) return false;
+        Db.Remove(record);
+        Db.SaveChanges();
+        return true;
     }
 }

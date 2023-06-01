@@ -44,13 +44,10 @@ public abstract class Main
         return response;
     }
 
-    public static object AddIssue(Issue issue)
+    public static IResult AddIssue(Issue issue)
     {
-        using var db = new Database();
-        db.Issues.Add(issue);
-        db.SaveChanges();
-        object response = new { message = "Issue has been successfully created" };
-        return response;
+        DataAccessLayer.Main.InsertIssue(issue);
+        return Results.Ok(new { message = "Issue has been successfully created" });
     }
 
     public static List<object> GetAllIssue()
@@ -73,40 +70,17 @@ public abstract class Main
         return response;
     }
 
-    public static object EditIssue(Issue newIssue)
+    public static IResult EditIssue(Issue newIssue)
     {
-        object response = new { message = "Issue not found", };
-        using var db = new Database();
-        foreach (var issue in db.Issues)
-        {
-            if (newIssue.Id == issue.Id)
-            {
-                issue.Summary = newIssue.Summary;
-                issue.Description = newIssue.Description;
-                issue.Priority = newIssue.Priority;
-                issue.Condition = newIssue.Condition;
-                db.SaveChanges();
-                response = new { message = "Issue has been updated", };
-            }
-        }
-
-        return response;
+        return DataAccessLayer.Main.EditIssue(newIssue)
+            ? Results.Ok(new { message = "Issue has been updated" })
+            : Results.BadRequest(new { message = "Issue not found" });
     }
 
-    public static object DeleteIssue(int Id)
+    public static IResult DeleteIssue(int id)
     {
-        object response = new { message = "Issue not found", };
-        using var db = new Database();
-        foreach (var issue in db.Issues)
-        {
-            if (Id == issue.Id)
-            {
-                db.Issues.Remove(issue);
-                db.SaveChanges();
-                response = new { message = "Issue has been deleted", };
-            }
-        }
-
-        return response;
+        return DataAccessLayer.Main.DeleteIssue(id)
+            ? Results.Ok(new { message = "Issue has been deleted" })
+            : Results.BadRequest(new { message = "Issue not found" });
     }
 }
