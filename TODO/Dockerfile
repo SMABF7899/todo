@@ -13,8 +13,8 @@ RUN apt install sqlite3 -y
 COPY ["TODO.csproj", "TODO/"]
 RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
-RUN ls -l
 COPY . .
+RUN ls -l
 RUN dotnet tool install --global dotnet-ef
 ENV PATH $PATH:/root/.dotnet/tools
 RUN dotnet-ef
