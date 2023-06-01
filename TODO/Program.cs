@@ -1,31 +1,79 @@
-using System.Runtime.InteropServices.JavaScript;
-using TODO;
+using dotenv.net;
+using TODO.Models;
 
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+namespace TODO
+{
+    public class Program
+    {
+        public static void Main(String[] args)
+        {
+            DotEnv.Load();
+            var builder = WebApplication.CreateBuilder(args);
+            var myAllowSpecificOrigins = Environment.GetEnvironmentVariable("SECRET_KEY_FOR_ALLOW_CLIENT") + "";
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: myAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins(Environment.GetEnvironmentVariable("CLIENT_IP") + "").AllowAnyHeader()
+                            .AllowAnyMethod().AllowAnyOrigin();
+                    });
+            });
+            builder.Services.AddControllers();
+            var app = builder.Build();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors(myAllowSpecificOrigins);
+            app.UseAuthorization();
+            app.MapControllers();
 
-app.MapGet("/", () => "TODO List");
-app.MapPost("/signup", signup);
-app.MapPost("/login", login);
-app.MapGet("/allUsers", allUsers);
-app.MapPost("/createIssue", createIssue);
-app.MapGet("/allIssues", allIssues);
-app.MapPost("/editIssue", editIssue);
-app.MapPost("/deleteIssue", deleteIssue);
-app.MapGet("/healthCheck", () => "app is Up :)");
+            app.MapGet("/", () => "TODO List");
+            app.MapPost("/signup", signup);
+            app.MapPost("/login", login);
+            app.MapGet("/allUsers", allUsers);
+            app.MapPost("/createIssue", createIssue);
+            app.MapGet("/allIssues", allIssues);
+            app.MapPost("/editIssue", editIssue);
+            app.MapPost("/deleteIssue", deleteIssue);
+            app.MapGet("/healthCheck", () => "app is Up :)");
 
-object signup(Signup signup) { return Main.SignupMethod(signup); }
+            object signup(Signup signup)
+            {
+                return PresentationLayer.Main.SignupMethod(signup);
+            }
 
-object allUsers() { return Main.AllUsersMethod(); }
+            object allUsers()
+            {
+                return PresentationLayer.Main.AllUsersMethod();
+            }
 
-object login(Login login) { return Main.LoginMethod(login); }
+            object login(Login login)
+            {
+                return PresentationLayer.Main.LoginMethod(login);
+            }
 
-object createIssue(Issue issue) { return Main.CreateIssueMethod(issue); }
+            object createIssue(Issue issue)
+            {
+                return PresentationLayer.Main.CreateIssueMethod(issue);
+            }
 
-object allIssues() { return Main.AllIssuesMethod(); }
+            object allIssues()
+            {
+                return PresentationLayer.Main.AllIssuesMethod();
+            }
 
-object editIssue(Issue issue) { return Main.EditIssueMethod(issue); }
+            object editIssue(Issue issue)
+            {
+                return PresentationLayer.Main.EditIssueMethod(issue);
+            }
 
-object deleteIssue(int Id) { return Main.DeleteIssueMethod(Id); }
+            object deleteIssue(int id)
+            {
+                return PresentationLayer.Main.DeleteIssueMethod(id);
+            }
 
-app.Run();
+            app.Run();
+        }
+    }
+}

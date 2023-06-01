@@ -12,4 +12,6 @@ For the new deployment, you need to backup the following files :\
 ```/app/database.db-wal``` and ```/app/database.db-shm```\
 Of course, this is observed in the deployment script of the project
 
+[fix block api](https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-7.0)
+
 [Visit my website](https://smabf.ir)
