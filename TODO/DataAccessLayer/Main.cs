@@ -1,4 +1,5 @@
-﻿using TODO.Models;
+﻿using dotenv.net;
+using TODO.Models;
 
 namespace TODO.DataAccessLayer;
 
@@ -18,16 +19,23 @@ public class Main
         return recordUsername != null || recordEmail != null;
     }
 
-    public static bool LoginUser(Login login)
+    public static string LoginUser(Login login)
     {
-        var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == login.username);
-        var recordPassword = recordUsername?.password;
-        var personalToken = recordUsername?.personalToken;
-        if (recordUsername != null && recordPassword != null && BCrypt.Net.BCrypt.Verify(recordPassword, personalToken))
+        DotEnv.Load();
+        var record = Db.Signups.FirstOrDefault(record => record.username == login.username);
+        var username = record?.username;
+        var password = record?.password;
+        var personalToken = record?.personalToken;
+        if (login.username == username && login.password == password &&
+            BCrypt.Net.BCrypt.Verify(login.password, personalToken))
         {
-            return true;
+            string secret = personalToken + Environment.GetEnvironmentVariable("SECRET_KEY");
+            var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
+            var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
+            JwtService jwtService = new JwtService(secret, issuer, audience);
+            var jwt = jwtService.GenerateSecurityToken(username);
+            return jwt;
         }
-
-        return false;
+        return "";
     }
 }

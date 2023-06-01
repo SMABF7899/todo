@@ -7,33 +7,20 @@ public abstract class Main
 {
     public static IResult AddUser(Signup signup)
     {
+        if (DataAccessLayer.Main.FindUser(signup.username, signup.email))
+            return Results.BadRequest(new { message = "Username or email is already registered" });
         var token = BCrypt.Net.BCrypt.HashPassword(signup.password);
         signup.personalToken = token;
-        if (DataAccessLayer.Main.FindUser(signup.username, signup.email)) return Results.BadRequest(new { message = "Username or email is already registered" });
         DataAccessLayer.Main.InsertUser(signup);
         return Results.Ok(new { message = "Registration was successful" });
     }
 
-    public static object EnterUser(Login login)
+    public static IResult EnterUser(Login login)
     {
         DotEnv.Load();
-        object response = new { message = "Username or password is not correct", };
-        using var db = new Database();
-        foreach (var signup in db.Signups)
-        {
-            if (signup.username == login.username && signup.password == login.password &&
-                BCrypt.Net.BCrypt.Verify(login.password, signup.personalToken))
-            {
-                string secret = signup.personalToken + Environment.GetEnvironmentVariable("SECRET_KEY");
-                var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
-                var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
-                JwtService jwtService = new JwtService(secret, issuer, audience);
-                response = new
-                    { message = "Login was successful", jwt = jwtService.GenerateSecurityToken(login.username) };
-            }
-        }
-
-        return response;
+        return DataAccessLayer.Main.LoginUser(login) != ""
+            ? Results.Ok(new { message = "Login was successful", jwt = DataAccessLayer.Main.LoginUser(login) })
+            : Results.BadRequest(new { message = "Username or password is not correct" });
     }
 
     public static List<object> GetAllUsers()
