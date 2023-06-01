@@ -5,15 +5,13 @@ namespace TODO.BusinessLayer;
 
 public abstract class Main
 {
-    public static object AddUser(Signup signup)
+    public static IResult AddUser(Signup signup)
     {
-        object response = new { message = "Username or email is already registered", };
         var token = BCrypt.Net.BCrypt.HashPassword(signup.password);
         signup.personalToken = token;
-        if (DataAccessLayer.Main.FindUser(signup.username, signup.email)) return response;
+        if (DataAccessLayer.Main.FindUser(signup.username, signup.email)) return Results.BadRequest(new { message = "Username or email is already registered" });
         DataAccessLayer.Main.InsertUser(signup);
-        response = new { message = "Registration was successful", };
-        return response;
+        return Results.Ok(new { message = "Registration was successful" });
     }
 
     public static object EnterUser(Login login)
@@ -27,7 +25,9 @@ public abstract class Main
                 BCrypt.Net.BCrypt.Verify(login.password, signup.personalToken))
             {
                 string secret = signup.personalToken + Environment.GetEnvironmentVariable("SECRET_KEY");
-                JwtService jwtService = new JwtService(secret, "https://smabf.ir/", "https://todo.smabf.ir");
+                var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
+                var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
+                JwtService jwtService = new JwtService(secret, issuer, audience);
                 response = new
                     { message = "Login was successful", jwt = jwtService.GenerateSecurityToken(login.username) };
             }
