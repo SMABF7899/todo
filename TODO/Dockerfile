@@ -14,7 +14,6 @@ COPY ["TODO.csproj", "TODO/"]
 RUN dotnet restore "TODO/TODO.csproj"
 WORKDIR "/src/TODO"
 COPY . .
-RUN mv sample-env .env
 RUN dotnet tool install --global dotnet-ef
 ENV PATH $PATH:/root/.dotnet/tools
 RUN dotnet-ef
