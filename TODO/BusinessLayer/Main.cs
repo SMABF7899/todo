@@ -5,22 +5,20 @@ namespace TODO.BusinessLayer;
 
 public abstract class Main
 {
-    public static IResult AddUser(Signup signup)
+    public static bool AddUser(Signup signup)
     {
-        if (DataAccessLayer.Main.FindUser(signup.username, signup.email))
-            return Results.BadRequest(new { message = "Username or email is already registered" });
+        if (DataAccessLayer.Main.FindUser(signup.username, signup.email)) return false;
         var token = BCrypt.Net.BCrypt.HashPassword(signup.password);
         signup.personalToken = token;
         DataAccessLayer.Main.InsertUser(signup);
-        return Results.Ok(new { message = "Registration was successful" });
+        return true;
     }
 
-    public static IResult EnterUser(Login login)
+    public static string? EnterUser(Login login)
     {
         DotEnv.Load();
-        return DataAccessLayer.Main.LoginUser(login) != ""
-            ? Results.Ok(new { message = "Login was successful", jwt = DataAccessLayer.Main.LoginUser(login) })
-            : Results.BadRequest(new { message = "Username or password is not correct" });
+        var jwt = DataAccessLayer.Main.LoginUser(login);
+        return jwt != "" ? jwt : "";
     }
 
     public static List<object> GetAllUsers()
@@ -44,10 +42,10 @@ public abstract class Main
         return response;
     }
 
-    public static IResult AddIssue(Issue issue)
+    public static bool AddIssue(Issue issue)
     {
-        DataAccessLayer.Main.InsertIssue(issue);
-        return Results.Ok(new { message = "Issue has been successfully created" });
+        var result = DataAccessLayer.Main.InsertIssue(issue);
+        return result;
     }
 
     public static List<object> GetAllIssue()
@@ -70,17 +68,15 @@ public abstract class Main
         return response;
     }
 
-    public static IResult EditIssue(Issue newIssue)
+    public static bool EditIssue(Issue newIssue)
     {
-        return DataAccessLayer.Main.EditIssue(newIssue)
-            ? Results.Ok(new { message = "Issue has been updated" })
-            : Results.BadRequest(new { message = "Issue not found" });
+        var result = DataAccessLayer.Main.EditIssue(newIssue);
+        return result;
     }
 
-    public static IResult DeleteIssue(int id)
+    public static bool DeleteIssue(int id)
     {
-        return DataAccessLayer.Main.DeleteIssue(id)
-            ? Results.Ok(new { message = "Issue has been deleted" })
-            : Results.BadRequest(new { message = "Issue not found" });
+        var result = DataAccessLayer.Main.DeleteIssue(id);
+        return result;
     }
 }

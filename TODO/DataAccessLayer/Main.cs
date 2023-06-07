@@ -12,10 +12,20 @@ public abstract class Main
         Db.SaveChanges();
     }
 
-    public static void InsertIssue(Issue issue)
+    public static bool InsertIssue(Issue issue)
     {
-        Db.Issues.Add(issue);
-        Db.SaveChanges();
+        // بهتره که خطا ها پاس داده بشه و توی لایه آخر گرفته بشه
+        try
+        {
+            Db.Issues.Add(issue);
+            Db.SaveChanges();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e + "Error in add user!");
+            return false;
+        }
     }
 
     public static bool FindUser(string username, string email)

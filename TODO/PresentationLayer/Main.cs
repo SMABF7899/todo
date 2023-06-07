@@ -11,15 +11,21 @@ public abstract class Main : Validation
             !CheckUsername(signup.username) ||
             !CheckPassword(signup.password))
             return Results.BadRequest(new { message = "Enter the parameters correctly" });
-        return BusinessLayer.Main.AddUser(signup);
+        var result = BusinessLayer.Main.AddUser(signup);
+        return !result
+            ? Results.BadRequest(new { message = "Username or email is already registered" })
+            : Results.Ok(new { message = "Registration was successful" });
     }
 
     public static IResult LoginMethod(Login login)
     {
         if (!NotEmpty.CheckLogin(login)) return Results.BadRequest(new { message = "Enter the requested items" });
-        if (CheckUsername(login.username) && CheckPassword(login.password))
-            return BusinessLayer.Main.EnterUser(login);
-        return Results.BadRequest(new { message = "Enter the parameters correctly" });
+        if (!CheckUsername(login.username) || !CheckPassword(login.password))
+            return Results.BadRequest(new { message = "Enter the parameters correctly" });
+        var result = BusinessLayer.Main.EnterUser(login);
+        return result != ""
+            ? Results.Ok(new { message = "Login was successful", jwt = result })
+            : Results.BadRequest(new { message = "Username or password is not correct" });
     }
 
     public static IResult AllUsersMethod()
@@ -29,8 +35,10 @@ public abstract class Main : Validation
 
     public static IResult CreateIssueMethod(Issue issue)
     {
-        return NotEmpty.CheckIssue(issue)
-            ? BusinessLayer.Main.AddIssue(issue)
+        if (!NotEmpty.CheckIssue(issue)) return Results.BadRequest(new { message = "Enter the requested items" });
+        var result = BusinessLayer.Main.AddIssue(issue);
+        return result
+            ? Results.Ok(new { message = "Issue has been successfully created" })
             : Results.BadRequest(new { message = "Enter the requested items" });
     }
 
@@ -41,10 +49,18 @@ public abstract class Main : Validation
 
     public static IResult EditIssueMethod(Issue issue)
     {
-        return NotEmpty.CheckIssue(issue)
-            ? BusinessLayer.Main.EditIssue(issue)
-            : Results.BadRequest(new { message = "Enter the requested items" });
+        if (!NotEmpty.CheckIssue(issue)) return Results.BadRequest(new { message = "Enter the requested items" });
+        var result = BusinessLayer.Main.EditIssue(issue);
+        return result
+            ? Results.Ok(new { message = "Issue has been updated" })
+            : Results.BadRequest(new { message = "Issue not found" });
     }
 
-    public static IResult DeleteIssueMethod(int id) { return BusinessLayer.Main.DeleteIssue(id); }
+    public static IResult DeleteIssueMethod(int id)
+    {
+        var result = BusinessLayer.Main.DeleteIssue(id);
+        return result
+            ? Results.Ok(new { message = "Issue has been deleted" })
+            : Results.BadRequest(new { message = "Issue not found" });
+    }
 }
