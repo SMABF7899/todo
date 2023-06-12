@@ -33,7 +33,7 @@ namespace TODO
             app.MapPost("/login", login);
             app.MapGet("/allUsers", allUsers);
             app.MapPost("/createIssue", createIssue);
-            app.MapGet("/allIssues", allIssues);
+            app.MapPost("/allIssues", allIssues);
             app.MapPost("/editIssue", editIssue);
             app.MapPost("/deleteIssue", deleteIssue);
             app.MapGet("/healthCheck", () => "app is Up :)");
@@ -58,9 +58,9 @@ namespace TODO
                 return PresentationLayer.Main.CreateIssueMethod(issue);
             }
 
-            object allIssues()
+            object allIssues(string reporter)
             {
-                return PresentationLayer.Main.AllIssuesMethod();
+                return PresentationLayer.Main.AllIssuesMethod(reporter);
             }
 
             object editIssue(Issue issue)

@@ -60,11 +60,10 @@ public abstract class Main
         catch (Exception e) { throw new Exception(e.Message); }
     }
 
-    public static List<object> GetAllIssue()
+    public static List<object> GetAllIssue(string reporter)
     {
-        List<object> response = new List<object>();
-        using var db = new Database();
-        foreach (var issue in db.Issues)
+        var response = new List<object>();
+        foreach (var issue in DataAccessLayer.Main.AllIssues(reporter))
         {
             response.Add(new
             {
@@ -75,6 +74,41 @@ public abstract class Main
                 priority = issue.Priority,
                 condition = issue.Condition
             });
+        }
+
+        return response;
+    }
+
+    public static List<object> GetAllIssue(string reporter, string sortByTime)
+    {
+        var response = new List<object>();
+        switch (sortByTime)
+        {
+            case "old":
+            {
+                response = GetAllIssue(reporter);
+
+                break;
+            }
+            case "new":
+            {
+                var issues = DataAccessLayer.Main.AllIssues(reporter);
+                issues.Reverse();
+                foreach (var issue in issues)
+                {
+                    response.Add(new
+                    {
+                        id = issue.Id,
+                        summary = issue.Summary,
+                        reporter = issue.Reporter,
+                        description = issue.Description,
+                        priority = issue.Priority,
+                        condition = issue.Condition
+                    });
+                }
+
+                break;
+            }
         }
 
         return response;

@@ -91,4 +91,16 @@ public abstract class Main
         }
         catch (Exception e) { throw new Exception(e.Message); }
     }
+
+    public static List<Issue> AllIssues(string reporter)
+    {
+        List<Issue> issues = new List<Issue>();
+        foreach (var issue in Db.Issues)
+        {
+            if (issue.Reporter == reporter)
+                issues.Add(issue);
+        }
+
+        return issues;
+    }
 }
