@@ -38,6 +38,16 @@ public abstract class Main
         }
         catch (Exception e) { throw new Exception(e.Message); }
     }
+    
+    public static bool FindUser(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername != null;
+        }
+        catch (Exception e) { throw new Exception(e.Message); }
+    }
 
     public static string? LoginUser(Login login)
     {
@@ -92,15 +102,27 @@ public abstract class Main
         catch (Exception e) { throw new Exception(e.Message); }
     }
 
-    public static List<Issue> AllIssues(string reporter)
+    public static List<object> AllIssuesObjects(string reporter)
     {
-        List<Issue> issues = new List<Issue>();
+        var response = new List<object>();
         foreach (var issue in Db.Issues)
         {
             if (issue.Reporter == reporter)
-                issues.Add(issue);
+                response.Add(issue);
         }
 
-        return issues;
+        return response;
+    }
+    
+    public static List<Issue> AllIssues(string reporter)
+    {
+        var response = new List<Issue>();
+        foreach (var issue in Db.Issues)
+        {
+            if (issue.Reporter == reporter)
+                response.Add(issue);
+        }
+
+        return response;
     }
 }

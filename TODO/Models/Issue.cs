@@ -6,6 +6,6 @@ public class Issue
     public string Summary { get; set; }
     public string Reporter { get; set; }
     public string Description { get; set; }
-    public Priority Priority { get; set; } = Priority.LOW;
+    public Priority Priority { get; set; } = Priority.Low;
     public Condition Condition { get; set; } = Condition.ToDo;
 }

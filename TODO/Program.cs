@@ -58,9 +58,9 @@ namespace TODO
                 return PresentationLayer.Main.CreateIssueMethod(issue);
             }
 
-            object allIssues(string reporter)
+            object allIssues(Filter filter)
             {
-                return PresentationLayer.Main.AllIssuesMethod(reporter);
+                return PresentationLayer.Main.AllIssuesMethod(filter);
             }
 
             object editIssue(Issue issue)

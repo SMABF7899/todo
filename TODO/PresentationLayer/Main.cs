@@ -54,11 +54,11 @@ public abstract class Main : Validation
         catch (Exception e) { return Results.BadRequest(new { message = "Error in Add Issue - 500 : " + e }); }
     }
 
-    public static IResult AllIssuesMethod(string reporter)
+    public static IResult AllIssuesMethod(Filter filter)
     {
-        return BusinessLayer.Main.GetAllIssue(reporter).Count == 0
+        return BusinessLayer.Main.GetAllIssue(filter.Reporter).Count == 0
             ? Results.BadRequest(new { message = "No Issues Found !" })
-            : Results.Ok(new { message = BusinessLayer.Main.GetAllIssue(reporter, "new") });
+            : Results.Ok(new { message = BusinessLayer.Main.GetIssueByFilter(filter) });
     }
 
     public static IResult EditIssueMethod(Issue issue)

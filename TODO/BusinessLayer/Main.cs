@@ -54,60 +54,108 @@ public abstract class Main
     {
         try
         {
+            if (!DataAccessLayer.Main.FindUser(issue.Reporter)) return false;
             var result = DataAccessLayer.Main.InsertIssue(issue);
             return result;
+
         }
         catch (Exception e) { throw new Exception(e.Message); }
     }
 
     public static List<object> GetAllIssue(string reporter)
     {
+        return DataAccessLayer.Main.AllIssuesObjects(reporter);
+    }
+
+    public static List<object> GetIssueByFilter(Filter filter)
+    {
         var response = new List<object>();
-        foreach (var issue in DataAccessLayer.Main.AllIssues(reporter))
+        if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
+            return FilterByTime(filter.Time, DataAccessLayer.Main.AllIssuesObjects(filter.Reporter));
+        else switch (filter.Time)
         {
-            response.Add(new
+            case "" when filter.Condition != Condition.None && filter.Priority == Priority.None:
+                return FilterByCondition(filter.Condition, DataAccessLayer.Main.AllIssues(filter.Reporter));
+            case "" when filter.Condition == Condition.None && filter.Priority != Priority.None:
+                return FilterByPriority(filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter));
+            case "" when filter.Condition != Condition.None && filter.Priority != Priority.None:
+                return FilterByConditionAndPriority(filter.Condition, filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter));
+            default:
             {
-                id = issue.Id,
-                summary = issue.Summary,
-                reporter = issue.Reporter,
-                description = issue.Description,
-                priority = issue.Priority,
-                condition = issue.Condition
-            });
+                if (filter.Time != "" && filter.Condition != Condition.None && filter.Priority == Priority.None)
+                    return FilterByTime(filter.Time, FilterByCondition(filter.Condition, DataAccessLayer.Main.AllIssues(filter.Reporter)));
+                else if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority != Priority.None)
+                    return FilterByTime(filter.Time, FilterByPriority(filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter)));
+                else if (filter.Time != "" && filter.Condition != Condition.None && filter.Priority != Priority.None)
+                    return FilterByTime(filter.Time,
+                        FilterByConditionAndPriority(filter.Condition, filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter)));
+                break;
+            }
         }
 
         return response;
     }
 
-    public static List<object> GetAllIssue(string reporter, string sortByTime)
+    private static List<object> FilterByTime(string time, List<object> issues)
     {
         var response = new List<object>();
-        switch (sortByTime)
+        switch (time)
         {
             case "old":
-            {
-                response = GetAllIssue(reporter);
-
-                break;
-            }
+                return issues;
             case "new":
-            {
-                var issues = DataAccessLayer.Main.AllIssues(reporter);
                 issues.Reverse();
-                foreach (var issue in issues)
-                {
-                    response.Add(new
-                    {
-                        id = issue.Id,
-                        summary = issue.Summary,
-                        reporter = issue.Reporter,
-                        description = issue.Description,
-                        priority = issue.Priority,
-                        condition = issue.Condition
-                    });
-                }
+                return issues;
+            default:
+                return response;
+        }
+    }
 
-                break;
+    private static List<object> FilterByCondition(Condition condition, List<Issue> issues)
+    {
+        var response = new List<object>();
+        foreach (var issue in issues)
+        {
+            if (issue.Condition == condition)
+                response.Add(issue);
+        }
+        return response;
+    }
+
+    private static List<object> FilterByPriority(Priority priority, List<Issue> issues)
+    {
+        var response = new List<object>();
+        foreach (var issue in issues)
+        {
+            if (issue.Priority == priority)
+                response.Add(issue);
+        }
+        return response;
+    }
+    
+    private static List<object> FilterByConditionAndPriority(Condition condition, Priority priority, List<Issue> issues)
+    {
+        var response = new List<object>();
+        var responseCondition = new List<object>();
+        var responsePriority = new List<object>();
+        foreach (var issue in issues)
+        {
+            if (issue.Condition == condition)
+                responseCondition.Add(issue);
+        }
+
+        foreach (var issue in issues)
+        {
+            if (issue.Priority == priority)
+                responsePriority.Add(issue);
+        }
+
+        foreach (var issueCondition in responseCondition)
+        {
+            foreach (var issuePriority in responsePriority)
+            {
+                if (issueCondition == issuePriority)
+                    response.Add(issuePriority);
             }
         }
 
