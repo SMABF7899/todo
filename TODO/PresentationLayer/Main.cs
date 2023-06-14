@@ -18,6 +18,7 @@ public abstract class Main : Validation
                 ? Results.BadRequest(new { message = "Username or email is already registered" })
                 : Results.Ok(new { message = "Registration was successful" });
         }
+        // خطایی که دیتابیس میده رو به کاربر نشون نده و فقط توی لاگ بنداز
         catch (Exception e) { return Results.BadRequest(new { message = "Error in Add User - 500 : " + e }); }
     }
 

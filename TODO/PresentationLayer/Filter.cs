@@ -1,4 +1,6 @@
-﻿namespace TODO.Models;
+﻿using TODO.Models;
+
+namespace TODO.PresentationLayer;
 
 public class Filter
 {
