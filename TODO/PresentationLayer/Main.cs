@@ -18,8 +18,10 @@ public abstract class Main : Validation
                 ? Results.BadRequest(new { message = "Username or email is already registered" })
                 : Results.Ok(new { message = "Registration was successful" });
         }
-        // خطایی که دیتابیس میده رو به کاربر نشون نده و فقط توی لاگ بنداز
-        catch (Exception e) { return Results.BadRequest(new { message = "Error in Add User - 500 : " + e }); }
+        catch (Exception e)
+        {
+            return Results.BadRequest(new { message = "Error in Add User - 500 : " + e });
+        }
     }
 
     public static IResult LoginMethod(Login login)
@@ -34,7 +36,10 @@ public abstract class Main : Validation
                 ? Results.Ok(new { message = "Login was successful", jwt = result })
                 : Results.BadRequest(new { message = "Username or password is not correct" });
         }
-        catch (Exception e) { return Results.BadRequest(new { message = "Error in Login User - 500 : " + e }); }
+        catch (Exception e)
+        {
+            return Results.BadRequest(new { message = "Error in Login User - 500 : " + e });
+        }
     }
 
     public static IResult AllUsersMethod()
@@ -52,7 +57,10 @@ public abstract class Main : Validation
                 ? Results.Ok(new { message = "Issue has been successfully created" })
                 : Results.BadRequest(new { message = "Enter the requested items" });
         }
-        catch (Exception e) { return Results.BadRequest(new { message = "Error in Add Issue - 500 : " + e }); }
+        catch (Exception e)
+        {
+            return Results.BadRequest(new { message = "Error in Add Issue - 500 : " + e });
+        }
     }
 
     public static IResult AllIssuesMethod(string reporter)
@@ -61,7 +69,7 @@ public abstract class Main : Validation
             ? Results.BadRequest(new { message = "No Issues Found !" })
             : Results.Ok(new { message = BusinessLayer.Main.GetAllIssue(reporter) });
     }
-    
+
     public static IResult FilterIssuesMethod(Filter filter)
     {
         return BusinessLayer.Main.GetAllIssue(filter.Reporter).Count == 0
@@ -79,7 +87,10 @@ public abstract class Main : Validation
                 ? Results.Ok(new { message = "Issue has been updated" })
                 : Results.BadRequest(new { message = "Issue not found" });
         }
-        catch (Exception e) { return Results.BadRequest(new { message = "Error in Edit Issue - 500 : " + e }); }
+        catch (Exception e)
+        {
+            return Results.BadRequest(new { message = "Error in Edit Issue - 500 : " + e });
+        }
     }
 
     public static IResult DeleteIssueMethod(int id)
@@ -91,6 +102,9 @@ public abstract class Main : Validation
                 ? Results.Ok(new { message = "Issue has been deleted" })
                 : Results.BadRequest(new { message = "Issue not found" });
         }
-        catch (Exception e) { return Results.BadRequest(new { message = "Error in Delete Issue - 500 : " + e }); }
+        catch (Exception e)
+        {
+            return Results.BadRequest(new { message = "Error in Delete Issue - 500 : " + e });
+        }
     }
 }

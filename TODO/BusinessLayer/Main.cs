@@ -16,7 +16,10 @@ public abstract class Main
             var result = DataAccessLayer.Main.InsertUser(signup);
             return result;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static string? EnterUser(Login login)
@@ -27,7 +30,10 @@ public abstract class Main
             var jwt = DataAccessLayer.Main.LoginUser(login);
             return jwt != "" ? jwt : "";
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static List<object> GetAllUsers()
@@ -58,9 +64,11 @@ public abstract class Main
             if (!DataAccessLayer.Main.FindUser(issue.Reporter)) return false;
             var result = DataAccessLayer.Main.InsertIssue(issue);
             return result;
-
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static List<object> GetAllIssue(string reporter)
@@ -73,26 +81,33 @@ public abstract class Main
         var response = new List<object>();
         if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
             return FilterByTime(filter.Time, DataAccessLayer.Main.AllIssuesObjects(filter.Reporter));
-        else switch (filter.Time)
-        {
-            case "" when filter.Condition != Condition.None && filter.Priority == Priority.None:
-                return FilterByCondition(filter.Condition, DataAccessLayer.Main.AllIssues(filter.Reporter));
-            case "" when filter.Condition == Condition.None && filter.Priority != Priority.None:
-                return FilterByPriority(filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter));
-            case "" when filter.Condition != Condition.None && filter.Priority != Priority.None:
-                return FilterByConditionAndPriority(filter.Condition, filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter));
-            default:
+        else
+            switch (filter.Time)
             {
-                if (filter.Time != "" && filter.Condition != Condition.None && filter.Priority == Priority.None)
-                    return FilterByTime(filter.Time, FilterByCondition(filter.Condition, DataAccessLayer.Main.AllIssues(filter.Reporter)));
-                else if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority != Priority.None)
-                    return FilterByTime(filter.Time, FilterByPriority(filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter)));
-                else if (filter.Time != "" && filter.Condition != Condition.None && filter.Priority != Priority.None)
-                    return FilterByTime(filter.Time,
-                        FilterByConditionAndPriority(filter.Condition, filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter)));
-                break;
+                case "" when filter.Condition != Condition.None && filter.Priority == Priority.None:
+                    return FilterByCondition(filter.Condition, DataAccessLayer.Main.AllIssues(filter.Reporter));
+                case "" when filter.Condition == Condition.None && filter.Priority != Priority.None:
+                    return FilterByPriority(filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter));
+                case "" when filter.Condition != Condition.None && filter.Priority != Priority.None:
+                    return FilterByConditionAndPriority(filter.Condition, filter.Priority,
+                        DataAccessLayer.Main.AllIssues(filter.Reporter));
+                default:
+                {
+                    if (filter.Time != "" && filter.Condition != Condition.None && filter.Priority == Priority.None)
+                        return FilterByTime(filter.Time,
+                            FilterByCondition(filter.Condition, DataAccessLayer.Main.AllIssues(filter.Reporter)));
+                    else if (filter.Time != "" && filter.Condition == Condition.None &&
+                             filter.Priority != Priority.None)
+                        return FilterByTime(filter.Time,
+                            FilterByPriority(filter.Priority, DataAccessLayer.Main.AllIssues(filter.Reporter)));
+                    else if (filter.Time != "" && filter.Condition != Condition.None &&
+                             filter.Priority != Priority.None)
+                        return FilterByTime(filter.Time,
+                            FilterByConditionAndPriority(filter.Condition, filter.Priority,
+                                DataAccessLayer.Main.AllIssues(filter.Reporter)));
+                    break;
+                }
             }
-        }
 
         return response;
     }
@@ -120,6 +135,7 @@ public abstract class Main
             if (issue.Condition == condition)
                 response.Add(issue);
         }
+
         return response;
     }
 
@@ -131,9 +147,10 @@ public abstract class Main
             if (issue.Priority == priority)
                 response.Add(issue);
         }
+
         return response;
     }
-    
+
     private static List<object> FilterByConditionAndPriority(Condition condition, Priority priority, List<Issue> issues)
     {
         var response = new List<object>();
@@ -170,7 +187,10 @@ public abstract class Main
             var result = DataAccessLayer.Main.EditIssue(newIssue);
             return result;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static bool DeleteIssue(int id)
@@ -180,6 +200,9 @@ public abstract class Main
             var result = DataAccessLayer.Main.DeleteIssue(id);
             return result;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }
