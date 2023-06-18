@@ -20,7 +20,8 @@ public abstract class Main : Validation
         }
         catch (Exception e)
         {
-            return Results.BadRequest(new { message = "Error in Add User - 500 : " + e });
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in Add User - 500" });
         }
     }
 
@@ -38,7 +39,8 @@ public abstract class Main : Validation
         }
         catch (Exception e)
         {
-            return Results.BadRequest(new { message = "Error in Login User - 500 : " + e });
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in Login User - 500" });
         }
     }
 
@@ -59,7 +61,8 @@ public abstract class Main : Validation
         }
         catch (Exception e)
         {
-            return Results.BadRequest(new { message = "Error in Add Issue - 500 : " + e });
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in Add Issue - 500" });
         }
     }
 
@@ -89,7 +92,8 @@ public abstract class Main : Validation
         }
         catch (Exception e)
         {
-            return Results.BadRequest(new { message = "Error in Edit Issue - 500 : " + e });
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in Edit Issue - 500" });
         }
     }
 
@@ -104,7 +108,8 @@ public abstract class Main : Validation
         }
         catch (Exception e)
         {
-            return Results.BadRequest(new { message = "Error in Delete Issue - 500 : " + e });
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in Delete Issue - 500" });
         }
     }
 }
