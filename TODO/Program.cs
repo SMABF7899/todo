@@ -3,7 +3,7 @@ using TODO.Models;
 
 namespace TODO
 {
-    public class Program
+    public abstract class Program
     {
         public static void Main(String[] args)
         {
@@ -29,50 +29,15 @@ namespace TODO
             app.MapControllers();
 
             app.MapGet("/", () => "TODO List");
-            app.MapPost("/signup", signup);
-            app.MapPost("/login", login);
-            app.MapGet("/allUsers", allUsers);
-            app.MapPost("/createIssue", createIssue);
-            app.MapGet("/allIssues", allIssues);
-            app.MapPost("/editIssue", editIssue);
-            app.MapPost("/deleteIssue", deleteIssue);
+            app.MapPost("/signup", APIS.signup);
+            app.MapPost("/login", APIS.login);
+            app.MapGet("/allUsers", APIS.allUsers);
+            app.MapPost("/createIssue", APIS.createIssue);
+            app.MapPost("/allIssues", APIS.allIssues);
+            app.MapPost("/filterIssues", APIS.filterIssues);
+            app.MapPost("/editIssue", APIS.editIssue);
+            app.MapPost("/deleteIssue", APIS.deleteIssue);
             app.MapGet("/healthCheck", () => "app is Up :)");
-
-            object signup(Signup signup)
-            {
-                return PresentationLayer.Main.SignupMethod(signup);
-            }
-
-            object allUsers()
-            {
-                return PresentationLayer.Main.AllUsersMethod();
-            }
-
-            object login(Login login)
-            {
-                return PresentationLayer.Main.LoginMethod(login);
-            }
-
-            object createIssue(Issue issue)
-            {
-                return PresentationLayer.Main.CreateIssueMethod(issue);
-            }
-
-            object allIssues()
-            {
-                return PresentationLayer.Main.AllIssuesMethod();
-            }
-
-            object editIssue(Issue issue)
-            {
-                return PresentationLayer.Main.EditIssueMethod(issue);
-            }
-
-            object deleteIssue(int id)
-            {
-                return PresentationLayer.Main.DeleteIssueMethod(id);
-            }
-
             app.Run();
         }
     }

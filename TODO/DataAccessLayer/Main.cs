@@ -6,6 +6,7 @@ namespace TODO.DataAccessLayer;
 public abstract class Main
 {
     private static readonly Database Db = new Database();
+
     public static bool InsertUser(Signup signup)
     {
         try
@@ -14,7 +15,10 @@ public abstract class Main
             Db.SaveChanges();
             return true;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static bool InsertIssue(Issue issue)
@@ -25,7 +29,10 @@ public abstract class Main
             Db.SaveChanges();
             return true;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static bool FindUser(string username, string email)
@@ -36,7 +43,23 @@ public abstract class Main
             var recordEmail = Db.Signups.FirstOrDefault(record => record.email == email);
             return recordUsername != null || recordEmail != null;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static bool FindUser(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername != null;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static string? LoginUser(Login login)
@@ -58,9 +81,13 @@ public abstract class Main
                 var jwt = jwtService.GenerateSecurityToken(username);
                 return jwt;
             }
+
             return "";
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static bool EditIssue(Issue issue)
@@ -76,7 +103,10 @@ public abstract class Main
             Db.SaveChanges();
             return true;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public static bool DeleteIssue(int id)
@@ -89,6 +119,33 @@ public abstract class Main
             Db.SaveChanges();
             return true;
         }
-        catch (Exception e) { throw new Exception(e.Message); }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static List<object> AllIssuesObjects(string reporter)
+    {
+        var response = new List<object>();
+        foreach (var issue in Db.Issues)
+        {
+            if (issue.Reporter == reporter)
+                response.Add(issue);
+        }
+
+        return response;
+    }
+
+    public static List<Issue> AllIssues(string reporter)
+    {
+        var response = new List<Issue>();
+        foreach (var issue in Db.Issues)
+        {
+            if (issue.Reporter == reporter)
+                response.Add(issue);
+        }
+
+        return response;
     }
 }
