@@ -1,4 +1,5 @@
-﻿using TODO.Models;
+﻿using TODO.BusinessLayer;
+using TODO.Models;
 
 namespace TODO.PresentationLayer;
 
@@ -49,11 +50,13 @@ public abstract class Main : Validation
         return Results.Ok(new { message = BusinessLayer.Main.GetAllUsers() });
     }
 
-    public static IResult CreateIssueMethod(Issue issue)
+    public static IResult CreateIssueMethod(Issue issue, string jwt)
     {
         if (!NotEmpty.CheckIssue(issue)) return Results.BadRequest(new { message = "Enter the requested items" });
         try
         {
+            if (!BusinessLayer.Main.CheckJwtValidation(issue.Reporter, jwt))
+                return Results.BadRequest(new { message = false });
             var result = BusinessLayer.Main.AddIssue(issue);
             return result
                 ? Results.Ok(new { message = "Issue has been successfully created" })
@@ -66,25 +69,31 @@ public abstract class Main : Validation
         }
     }
 
-    public static IResult AllIssuesMethod(string reporter)
+    public static IResult AllIssuesMethod(string reporter, string jwt)
     {
+        if (!BusinessLayer.Main.CheckJwtValidation(reporter, jwt))
+            return Results.BadRequest(new { message = false });
         return BusinessLayer.Main.GetAllIssue(reporter).Count == 0
             ? Results.BadRequest(new { message = "No Issues Found !" })
             : Results.Ok(new { message = BusinessLayer.Main.GetAllIssue(reporter) });
     }
 
-    public static IResult FilterIssuesMethod(Filter filter)
+    public static IResult FilterIssuesMethod(Filter filter, string jwt)
     {
+        if (!BusinessLayer.Main.CheckJwtValidation(filter.Reporter, jwt))
+            return Results.BadRequest(new { message = false });
         return BusinessLayer.Main.GetAllIssue(filter.Reporter).Count == 0
             ? Results.BadRequest(new { message = "No Issues Found !" })
             : Results.Ok(new { message = BusinessLayer.Main.GetIssueByFilter(filter) });
     }
 
-    public static IResult EditIssueMethod(Issue issue)
+    public static IResult EditIssueMethod(Issue issue, string jwt)
     {
         if (!NotEmpty.CheckIssue(issue)) return Results.BadRequest(new { message = "Enter the requested items" });
         try
         {
+            if (!BusinessLayer.Main.CheckJwtValidation(issue.Reporter, jwt))
+                return Results.BadRequest(new { message = false });
             var result = BusinessLayer.Main.EditIssue(issue);
             return result
                 ? Results.Ok(new { message = "Issue has been updated" })
@@ -97,11 +106,13 @@ public abstract class Main : Validation
         }
     }
 
-    public static IResult DeleteIssueMethod(int id)
+    public static IResult DeleteIssueMethod(Issue issue, string jwt)
     {
         try
         {
-            var result = BusinessLayer.Main.DeleteIssue(id);
+            if (!BusinessLayer.Main.CheckJwtValidation(issue.Reporter, jwt))
+                return Results.BadRequest(new { message = "Not Login" });
+            var result = BusinessLayer.Main.DeleteIssue(issue.Id);
             return result
                 ? Results.Ok(new { message = "Issue has been deleted" })
                 : Results.BadRequest(new { message = "Issue not found" });

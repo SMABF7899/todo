@@ -38,7 +38,7 @@ public class JwtService
         return tokenHandler.WriteToken(token);
     }
 
-    public bool VerifySecurityToken(string jwt, string key)
+    public bool VerifySecurityToken(string jwt, string key, string username)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var validationParameters = new TokenValidationParameters
@@ -55,6 +55,9 @@ public class JwtService
         {
             SecurityToken validatedToken;
             var claimsPrincipal = tokenHandler.ValidateToken(jwt, validationParameters, out validatedToken);
+            var nameClaim = claimsPrincipal.FindFirst(ClaimTypes.Name);
+            if (nameClaim == null || nameClaim.Value != username)
+                return false;
             return true;
         }
         catch (Exception)

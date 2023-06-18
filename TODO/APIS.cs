@@ -11,13 +11,13 @@ public class APIS
 
     public static object login(Login login) { return PresentationLayer.Main.LoginMethod(login); }
 
-    public static object createIssue(Issue issue) { return PresentationLayer.Main.CreateIssueMethod(issue); }
+    public static object createIssue(Issue issue, string? jwt) { return PresentationLayer.Main.CreateIssueMethod(issue, jwt); }
 
-    public static object allIssues(string reporter) { return PresentationLayer.Main.AllIssuesMethod(reporter); }
+    public static object allIssues(string reporter, string? jwt) { return PresentationLayer.Main.AllIssuesMethod(reporter, jwt); }
             
-    public static object filterIssues(Filter filter) { return PresentationLayer.Main.FilterIssuesMethod(filter); }
+    public static object filterIssues(Filter filter, string? jwt) { return PresentationLayer.Main.FilterIssuesMethod(filter, jwt); }
 
-    public static object editIssue(Issue issue) { return PresentationLayer.Main.EditIssueMethod(issue); }
+    public static object editIssue(Issue issue, string? jwt) { return PresentationLayer.Main.EditIssueMethod(issue, jwt); }
 
-    public static object deleteIssue(int id) { return PresentationLayer.Main.DeleteIssueMethod(id); }
+    public static object deleteIssue(Issue issue, string? jwt) { return PresentationLayer.Main.DeleteIssueMethod(issue, jwt); }
 }
