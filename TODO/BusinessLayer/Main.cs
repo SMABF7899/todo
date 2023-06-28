@@ -207,11 +207,18 @@ public abstract class Main
 
     public static bool CheckJwtValidation(string username, string jwt)
     {
-        DotEnv.Load();
-        var secret = DataAccessLayer.Main.GetPersonalToken(username) + Environment.GetEnvironmentVariable("SECRET_KEY");
-        var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
-        var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
-        var jwtService = new JwtService(secret, issuer, audience);
-        return jwtService.VerifySecurityToken(jwt, secret, username);
+        try
+        {
+            DotEnv.Load();
+            var secret = DataAccessLayer.Main.GetPersonalToken(username) + Environment.GetEnvironmentVariable("SECRET_KEY");
+            var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
+            var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
+            var jwtService = new JwtService(secret, issuer, audience);
+            return jwtService.VerifySecurityToken(jwt, secret, username);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

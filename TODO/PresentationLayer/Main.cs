@@ -71,11 +71,19 @@ public abstract class Main : Validation
 
     public static IResult AllIssuesMethod(string reporter, string jwt)
     {
-        if (!BusinessLayer.Main.CheckJwtValidation(reporter, jwt))
-            return Results.BadRequest(new { message = false });
-        return BusinessLayer.Main.GetAllIssue(reporter).Count == 0
-            ? Results.BadRequest(new { message = "No Issues Found !" })
-            : Results.Ok(new { message = BusinessLayer.Main.GetAllIssue(reporter) });
+        try
+        {
+            if (!BusinessLayer.Main.CheckJwtValidation(reporter, jwt))
+                return Results.BadRequest(new { message = false });
+            return BusinessLayer.Main.GetAllIssue(reporter).Count == 0
+                ? Results.BadRequest(new { message = "No Issues Found !" })
+                : Results.Ok(new { message = BusinessLayer.Main.GetAllIssue(reporter) });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in Get Issue - 500" });
+        }
     }
 
     public static IResult FilterIssuesMethod(Filter filter, string jwt)
