@@ -7,5 +7,5 @@ Setup:
         - unset http_proxy && unset https_proxy && unset HTTP_PROXY && unset HTTPS_PROXY
         - /bin/bash setup.sh
     tags:
-        - shell
+        - shell_backend
     when: manual
