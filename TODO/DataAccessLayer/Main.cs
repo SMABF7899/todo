@@ -74,10 +74,10 @@ public abstract class Main
             if (login.username == username && login.password == password &&
                 BCrypt.Net.BCrypt.Verify(login.password, personalToken))
             {
-                string secret = personalToken + Environment.GetEnvironmentVariable("SECRET_KEY");
+                var secret = personalToken + Environment.GetEnvironmentVariable("SECRET_KEY");
                 var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
                 var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
-                JwtService jwtService = new JwtService(secret, issuer, audience);
+                var jwtService = new JwtService(secret, issuer, audience);
                 var jwt = jwtService.GenerateSecurityToken(username);
                 return jwt;
             }
@@ -147,5 +147,18 @@ public abstract class Main
         }
 
         return response;
+    }
+
+    public static string? GetPersonalToken(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername?.personalToken;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

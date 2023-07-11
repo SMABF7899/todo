@@ -26,7 +26,6 @@ public abstract class Main
     {
         try
         {
-            DotEnv.Load();
             var jwt = DataAccessLayer.Main.LoginUser(login);
             return jwt != "" ? jwt : "";
         }
@@ -79,7 +78,9 @@ public abstract class Main
     public static List<object> GetIssueByFilter(Filter filter)
     {
         var response = new List<object>();
-        if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
+        if (filter.Time == "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
+            return DataAccessLayer.Main.AllIssuesObjects(filter.Reporter);
+        else if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
             return FilterByTime(filter.Time, DataAccessLayer.Main.AllIssuesObjects(filter.Reporter));
         else
             switch (filter.Time)
@@ -199,6 +200,23 @@ public abstract class Main
         {
             var result = DataAccessLayer.Main.DeleteIssue(id);
             return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static bool CheckJwtValidation(string username, string jwt)
+    {
+        try
+        {
+            DotEnv.Load();
+            var secret = DataAccessLayer.Main.GetPersonalToken(username) + Environment.GetEnvironmentVariable("SECRET_KEY");
+            var issuer = Environment.GetEnvironmentVariable("ISSUER_ADDRESS") + "";
+            var audience = Environment.GetEnvironmentVariable("AUDIENCE_ADDRESS") + "";
+            var jwtService = new JwtService(secret, issuer, audience);
+            return jwtService.VerifySecurityToken(jwt, secret, username);
         }
         catch (Exception e)
         {
