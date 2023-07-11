@@ -78,7 +78,9 @@ public abstract class Main
     public static List<object> GetIssueByFilter(Filter filter)
     {
         var response = new List<object>();
-        if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
+        if (filter.Time == "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
+            return DataAccessLayer.Main.AllIssuesObjects(filter.Reporter);
+        else if (filter.Time != "" && filter.Condition == Condition.None && filter.Priority == Priority.None)
             return FilterByTime(filter.Time, DataAccessLayer.Main.AllIssuesObjects(filter.Reporter));
         else
             switch (filter.Time)
