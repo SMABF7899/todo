@@ -131,4 +131,19 @@ public abstract class Main : Validation
             return Results.BadRequest(new { message = "Error in Delete Issue - 500" });
         }
     }
+
+    public static IResult CheckJWTMethod(string username, string jwt)
+    {
+        try
+        {
+            return !BusinessLayer.Main.CheckJwtValidation(username, jwt)
+                ? Results.BadRequest(new { message = false })
+                : Results.Ok(true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in check JWT - 500" });
+        }
+    }
 }
