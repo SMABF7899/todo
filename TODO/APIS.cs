@@ -20,4 +20,6 @@ public class APIS
     public static object editIssue(Issue issue, string? jwt) { return PresentationLayer.Main.EditIssueMethod(issue, jwt); }
 
     public static object deleteIssue(Issue issue, string? jwt) { return PresentationLayer.Main.DeleteIssueMethod(issue, jwt); }
+
+    public static object checkJWT(string? username, string? jwt) { return PresentationLayer.Main.CheckJWTMethod(username, jwt); }
 }
