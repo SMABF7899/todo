@@ -5,11 +5,9 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-#set -e
-echo -e "${YELLOW}[local] docker cp TODO-List:/app/database.db-wal /home/gitlab-runner/Backups${NC}"
-docker cp TODO-List:/app/database.db-wal /home/gitlab-runner/Backups
-echo -e "${YELLOW}[local] docker cp TODO-List:/app/database.db-shm /home/gitlab-runner/Backups${NC}"
-docker cp TODO-List:/app/database.db-shm /home/gitlab-runner/Backups
+set -e
+cp $ENV /home/gitlab-runner/Backups
+exit 0
 echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
 docker stop TODO-List
 echo -e "${YELLOW}[local] cd TODO${NC}"
