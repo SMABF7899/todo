@@ -5,9 +5,9 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-set -e
 echo -e "${YELLOW}[local] rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
 rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql
+set -e
 echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db .dump > /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
 docker exec -i TODO-List sqlite3 database.db .dump > /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql
 echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
