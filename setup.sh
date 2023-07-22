@@ -6,8 +6,6 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 set -e
-docker cp $ENV TODO-List:/app/.env
-exit 0
 echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
 docker stop TODO-List
 echo -e "${YELLOW}[local] cd TODO${NC}"
@@ -21,10 +19,12 @@ docker run --name TODO-List -d --network-alias todo-list -p 5000:5000 -p 7011:70
 sleep 5
 echo -e "${YELLOW}[local] cd ..${NC}"
 cd ..
-echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/${NC}"
-docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/
-echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/${NC}"
-docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/
+echo -e "${YELLOW}[local] docker cp $ENV TODO-List:/app/.env${NC}"
+docker cp $ENV TODO-List:/app/.env
+# echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/${NC}"
+# docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/
+# echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/${NC}"
+# docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/
 echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
