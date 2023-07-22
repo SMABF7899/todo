@@ -6,7 +6,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 set -e
-cp $ENV /home/gitlab-runner/Backups
+docker cp $ENV TODO-List:/app/.env
 exit 0
 echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
 docker stop TODO-List
