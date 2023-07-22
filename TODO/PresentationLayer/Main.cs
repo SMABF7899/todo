@@ -146,4 +146,19 @@ public abstract class Main : Validation
             return Results.BadRequest(new { message = "Error in check JWT - 500" });
         }
     }
+
+    public static IResult CheckValidationEmailMethod(string username)
+    {
+        try
+        {
+            return BusinessLayer.Main.CheckVerificationEmail(username) == "true"
+                ? Results.Ok(true)
+                : Results.Ok(false);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in check Validation Email - 500" });
+        }
+    }
 }

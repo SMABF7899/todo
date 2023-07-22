@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
 
-namespace TODO.PresentationLayer;
+namespace TODO.BusinessLayer;
 
 public class SendEmail
 {
@@ -109,7 +108,7 @@ public class SendEmail
     {
         ToName = name;
         ToEmail = email;
-        Random random = new Random();
+        var random = new Random();
         Code = random.Next(100000, 999999);
     }
 
@@ -117,14 +116,14 @@ public class SendEmail
     {
         try
         {
-            MailMessage message = new MailMessage();
+            var message = new MailMessage();
             message.Subject = Subject;
             message.Body = Body;
             message.IsBodyHtml = true;
             message.From = new MailAddress(FromEmail, FromName);
             message.To.Add(new MailAddress(ToEmail, ToName));
 
-            SmtpClient smtpClient = new SmtpClient(SmtpServer, SmtpPort);
+            var smtpClient = new SmtpClient(SmtpServer, SmtpPort);
             smtpClient.EnableSsl = true;
             smtpClient.Credentials = new NetworkCredential(SmtpUsername, SmtpPassword);
 

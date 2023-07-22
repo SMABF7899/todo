@@ -9,4 +9,5 @@ public class Signup
     public string username { get; set; }
     public string email { get; set; }
     public string password { get; set; }
+    public string verificationEmail { get; set; } = "false";
 }

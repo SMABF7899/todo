@@ -161,4 +161,17 @@ public abstract class Main
             throw new Exception(e.Message);
         }
     }
+
+    public static string? GetVerificationEmail(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername?.verificationEmail;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }

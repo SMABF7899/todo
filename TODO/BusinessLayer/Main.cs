@@ -223,4 +223,16 @@ public abstract class Main
             throw new Exception(e.Message);
         }
     }
+
+    public static string? CheckVerificationEmail(string username)
+    {
+        try
+        {
+            return DataAccessLayer.Main.GetVerificationEmail(username);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }

@@ -38,6 +38,7 @@ namespace TODO
             app.MapPost("/editIssue", APIS.editIssue);
             app.MapPost("/deleteIssue", APIS.deleteIssue);
             app.MapPost("/checkJWT", APIS.checkJWT);
+            app.MapPost("/checkValidationEmail", APIS.checkValidationEmail);
             app.MapGet("/healthCheck", () => "app is Up :)");
             app.Run();
         }
