@@ -10,8 +10,8 @@ rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db
 set -e
 echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db  \".backup backup-$CI_PIPELINE_ID.db\"${NC}"
 docker exec -i TODO-List sqlite3 database.db ".backup backup-$CI_PIPELINE_ID.db"
-echo -e "${YELLOW}[local] docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/backup/${NC}"
-docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/backup/
+echo -e "${YELLOW}[local] docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/Backups/${NC}"
+docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/Backups/
 echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
 docker stop TODO-List
 echo -e "${YELLOW}[local] cd TODO${NC}"
