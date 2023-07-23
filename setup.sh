@@ -6,11 +6,13 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 echo -e "${YELLOW}[local] rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
-rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql
+rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db
 set -e
-# echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db .dump > /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
-# docker exec -i TODO-List sqlite3 database.db .dump > /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql
-# echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
+echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db  \".backup backup-$CI_PIPELINE_ID.db\"${NC}"
+docker exec -i TODO-List sqlite3 database.db ".backup backup-$CI_PIPELINE_ID.db"
+echo -e "${YELLOW}[local] docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/backup/${NC}"
+docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/backup/
+echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
 docker stop TODO-List
 echo -e "${YELLOW}[local] cd TODO${NC}"
 cd TODO
@@ -25,10 +27,10 @@ echo -e "${YELLOW}[local] cd ..${NC}"
 cd ..
 echo -e "${YELLOW}[local] docker cp $ENV TODO-List:/app/.env${NC}"
 docker cp $ENV TODO-List:/app/.env
-# echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql TODO-List:/app/${NC}"
-# docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql TODO-List:/app/
-# echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db .read /app/backup-$CI_PIPELINE_ID.sql${NC}"
-# docker exec -i TODO-List sqlite3 database.db .read /app/backup-$CI_PIPELINE_ID.sql
+echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db TODO-List:/app/${NC}"
+docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db TODO-List:/app/
+echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db  \".restore backup-$CI_PIPELINE_ID.db\"${NC}"
+docker exec -i TODO-List sqlite3 database.db ".restore backup-$CI_PIPELINE_ID.db"
 echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
