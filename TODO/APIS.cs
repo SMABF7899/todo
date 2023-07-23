@@ -22,4 +22,7 @@ public class APIS
     public static object deleteIssue(Issue issue, string? jwt) { return PresentationLayer.Main.DeleteIssueMethod(issue, jwt); }
 
     public static object checkJWT(string? username, string? jwt) { return PresentationLayer.Main.CheckJWTMethod(username, jwt); }
+    public static object checkValidationEmail(string? username) { return PresentationLayer.Main.CheckValidationEmailMethod(username); }
+    public static object sendCodeForEmailValidation(string? username) { return PresentationLayer.Main.SendCodeForEmailValidationMethod(username); }
+    public static object checkCodeForEmailValidation(string? username, string code) { return PresentationLayer.Main.CheckCodeForEmailValidationMethod(username, code); }
 }

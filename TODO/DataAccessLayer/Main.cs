@@ -161,4 +161,59 @@ public abstract class Main
             throw new Exception(e.Message);
         }
     }
+
+    public static string? GetVerificationEmail(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername?.verificationEmail;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static string? GetFullName(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername?.firstName + " " + recordUsername?.lastName;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static string? GetEmail(string username)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            return recordUsername?.email;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static bool UpdateEmailValidation(string username, string value)
+    {
+        try
+        {
+            var recordUsername = Db.Signups.FirstOrDefault(recordUsername => recordUsername.username == username);
+            if (recordUsername == null) return false;
+            recordUsername.verificationEmail = value;
+            Db.SaveChanges();
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }

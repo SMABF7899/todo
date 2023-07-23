@@ -1,4 +1,5 @@
-﻿using TODO.BusinessLayer;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using TODO.BusinessLayer;
 using TODO.Models;
 
 namespace TODO.PresentationLayer;
@@ -144,6 +145,51 @@ public abstract class Main : Validation
         {
             Console.WriteLine(e);
             return Results.BadRequest(new { message = "Error in check JWT - 500" });
+        }
+    }
+
+    public static IResult CheckValidationEmailMethod(string username)
+    {
+        try
+        {
+            return BusinessLayer.Main.CheckVerificationEmail(username) == "true"
+                ? Results.Ok(true)
+                : Results.BadRequest(false);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in check Validation Email - 500" });
+        }
+    }
+
+    public static IResult SendCodeForEmailValidationMethod(string username)
+    {
+        try
+        {
+            var code = BusinessLayer.Main.SendCodeForEmailValidation(username);
+            if (code != "false" && code != "User not found !")
+                return Results.Ok(new { message = "Please enter the verification code." });
+            return Results.BadRequest(new { message = code });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in send code Validation Email - 500" });
+        }
+    }
+
+    public static IResult CheckCodeForEmailValidationMethod(string username, string submitCode)
+    {
+        try
+        {
+            var result = BusinessLayer.Main.CheckCodeForEmailValidation(username, submitCode);
+            return result ? Results.Ok(result) : Results.BadRequest(result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Results.BadRequest(new { message = "Error in check code Validation Email - 500" });
         }
     }
 }

@@ -223,4 +223,34 @@ public abstract class Main
             throw new Exception(e.Message);
         }
     }
+
+    public static string? CheckVerificationEmail(string username)
+    {
+        try
+        {
+            return DataAccessLayer.Main.GetVerificationEmail(username);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public static string SendCodeForEmailValidation(string username)
+    {
+        var name = DataAccessLayer.Main.GetFullName(username);
+        var email = DataAccessLayer.Main.GetEmail(username);
+        if (name == null || email == null) return "User not found !";
+        var sendEmail = new SendEmail(name, email);
+        var code = sendEmail.SendCode();
+        return DataAccessLayer.Main.UpdateEmailValidation(username, code) ? code : "false";
+    }
+
+    public static bool CheckCodeForEmailValidation(string username, string submitCode)
+    {
+        var verificationCode = DataAccessLayer.Main.GetVerificationEmail(username);
+        var result = verificationCode != null && SendEmail.CheckCode(submitCode, verificationCode);
+        if (result) DataAccessLayer.Main.UpdateEmailValidation(username, "true");
+        return result;
+    }
 }
