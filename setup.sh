@@ -5,12 +5,12 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-#set -e
-echo -e "${YELLOW}[local] docker cp TODO-List:/app/database.db-wal /home/gitlab-runner/Backups${NC}"
-docker cp TODO-List:/app/database.db-wal /home/gitlab-runner/Backups
-echo -e "${YELLOW}[local] docker cp TODO-List:/app/database.db-shm /home/gitlab-runner/Backups${NC}"
-docker cp TODO-List:/app/database.db-shm /home/gitlab-runner/Backups
-echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
+echo -e "${YELLOW}[local] rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
+rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql
+set -e
+# echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db .dump > /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
+# docker exec -i TODO-List sqlite3 database.db .dump > /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql
+# echo -e "${YELLOW}[local] docker stop TODO-List${NC}"
 docker stop TODO-List
 echo -e "${YELLOW}[local] cd TODO${NC}"
 cd TODO
@@ -23,10 +23,12 @@ docker run --name TODO-List -d --network-alias todo-list -p 5000:5000 -p 7011:70
 sleep 5
 echo -e "${YELLOW}[local] cd ..${NC}"
 cd ..
-echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/${NC}"
-docker cp /home/gitlab-runner/Backups/database.db-wal TODO-List:/app/
-echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/${NC}"
-docker cp /home/gitlab-runner/Backups/database.db-shm TODO-List:/app/
+echo -e "${YELLOW}[local] docker cp $ENV TODO-List:/app/.env${NC}"
+docker cp $ENV TODO-List:/app/.env
+# echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql TODO-List:/app/${NC}"
+# docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql TODO-List:/app/
+# echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db .read /app/backup-$CI_PIPELINE_ID.sql${NC}"
+# docker exec -i TODO-List sqlite3 database.db .read /app/backup-$CI_PIPELINE_ID.sql
 echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
