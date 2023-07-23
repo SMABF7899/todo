@@ -153,7 +153,7 @@ public abstract class Main : Validation
         {
             return BusinessLayer.Main.CheckVerificationEmail(username) == "true"
                 ? Results.Ok(true)
-                : Results.Ok(false);
+                : Results.BadRequest(false);
         }
         catch (Exception e)
         {
