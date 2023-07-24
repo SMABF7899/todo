@@ -41,7 +41,7 @@ namespace TODO
             app.MapPost("/checkValidationEmail", APIS.checkValidationEmail);
             app.MapPost("/sendCodeForEmailValidation", APIS.sendCodeForEmailValidation);
             app.MapPost("/checkCodeForEmailValidation", APIS.checkCodeForEmailValidation);
-            app.MapGet("/healthCheck", () => "app is Up :)");
+            app.MapGet("/buildDate", () => Environment.GetEnvironmentVariable("BUILD_DATE"));
             app.Run();
         }
     }

@@ -8,6 +8,8 @@ NC='\033[0m'
 echo -e "${YELLOW}[local] rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.sql${NC}"
 rm /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db
 set -e
+echo -e "${YELLOW}[local] buildDate=`date +"%Y-%m-%d %H:%M:%S "`+0330${NC}"
+buildDate=`date +"%Y-%m-%d %H:%M:%S "`+0330
 echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db  \".backup backup-$CI_PIPELINE_ID.db\"${NC}"
 docker exec -i TODO-List sqlite3 database.db ".backup backup-$CI_PIPELINE_ID.db"
 echo -e "${YELLOW}[local] docker cp TODO-List:/app/backup-$CI_PIPELINE_ID.db /home/gitlab-runner/Backups/${NC}"
@@ -27,6 +29,8 @@ echo -e "${YELLOW}[local] cd ..${NC}"
 cd ..
 echo -e "${YELLOW}[local] docker cp $ENV TODO-List:/app/.env${NC}"
 docker cp $ENV TODO-List:/app/.env
+echo -e "${YELLOW}[local] docker exec -i TODO-List sed -i "s/BUILD_DATE=.*/BUILD_DATE=$buildDate/g" /app/.env${NC}"
+docker exec -i TODO-List sed -i "s/BUILD_DATE=.*/BUILD_DATE=$buildDate/g" /app/.env
 echo -e "${YELLOW}[local] docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db TODO-List:/app/${NC}"
 docker cp /home/gitlab-runner/Backups/backup-$CI_PIPELINE_ID.db TODO-List:/app/
 echo -e "${YELLOW}[local] docker exec -i TODO-List sqlite3 database.db  \".restore backup-$CI_PIPELINE_ID.db\"${NC}"
@@ -35,13 +39,13 @@ echo -e "${YELLOW}[local] docker restart TODO-List${NC}"
 docker restart TODO-List
 sleep 5
 i=1
-while [[ ${result} != "app is Up :)" ]]; do
+while [[ ${result} != ${buildDate} ]]; do
     echo -e "${YELLOW}Try "$i" of 20 ...${NC}"
     sleep 10
-    echo -e "${YELLOW}[local] curl --max-time 30 -s http://127.0.0.1:5000/healthCheck${NC}"
-    result=`curl --max-time 30 -s http://127.0.0.1:5000/healthCheck`
-    echo -e "${YELLOW}Expected Result: app is Up :)${NC}"
-    echo -e "${YELLOW}Current  Result: $result${NC}"
+    echo -e "${YELLOW}[local] curl --max-time 30 -s http://127.0.0.1:5000/buildDate${NC}"
+    result=`curl --max-time 30 -s http://127.0.0.1:5000/buildDate`
+    echo -e "${YELLOW}Expected Result: ${buildDate}${NC}"
+    echo -e "${YELLOW}Current  Result: ${result}${NC}"
     ((i=i+1))
     if [ $i == 20 ]; then
         echo -e "${RED}Error in Deploy${NC}"
