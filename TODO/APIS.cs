@@ -7,8 +7,6 @@ public class APIS
 {
     public static object signup(Signup signup) { return PresentationLayer.Main.SignupMethod(signup); }
 
-    public static object allUsers() { return PresentationLayer.Main.AllUsersMethod(); }
-
     public static object login(Login login) { return PresentationLayer.Main.LoginMethod(login); }
 
     public static object createIssue(Issue issue, string? jwt) { return PresentationLayer.Main.CreateIssueMethod(issue, jwt); }

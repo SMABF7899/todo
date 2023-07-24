@@ -46,11 +46,6 @@ public abstract class Main : Validation
         }
     }
 
-    public static IResult AllUsersMethod()
-    {
-        return Results.Ok(new { message = BusinessLayer.Main.GetAllUsers() });
-    }
-
     public static IResult CreateIssueMethod(Issue issue, string jwt)
     {
         if (!NotEmpty.CheckIssue(issue)) return Results.BadRequest(new { message = "Enter the requested items" });

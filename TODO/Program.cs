@@ -31,7 +31,6 @@ namespace TODO
             app.MapGet("/", () => "TODO List");
             app.MapPost("/signup", APIS.signup);
             app.MapPost("/login", APIS.login);
-            app.MapGet("/allUsers", APIS.allUsers);
             app.MapPost("/createIssue", APIS.createIssue);
             app.MapPost("/allIssues", APIS.allIssues);
             app.MapPost("/filterIssues", APIS.filterIssues);
